@@ -1,10 +1,11 @@
 from ctypes import c_void_p
-from glfw.GLFW import *
+from glfw.GLFW import * # for key enums
 from OpenGL.GL import *
 from OpenGL.arrays.arraydatatype import ArrayDatatype
 import glm
 import numpy as np
 from shader import Shader
+from window import *
 
 width = 1280
 height = 720
@@ -28,22 +29,13 @@ def OnKeyReleased(key):
     elif key == GLFW_KEY_S:
         back = False
 
-def OnKeyEvent(_, key, scancode, action, mods):
-    if action == GLFW_PRESS:
-        OnKeyPressed(key)
-    if action == GLFW_RELEASE:
-        OnKeyReleased(key)
+AddToCallback(EVENT_KEY_PRESS, OnKeyPressed)
+AddToCallback(EVENT_KEY_RELEASE, OnKeyReleased)
 
-glfwInit()
+window = Window(width, height, "Window")
 
-window = glfwCreateWindow(width, height, "Deneme", None, None)
-glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
-glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3)
-glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
-
-glfwMakeContextCurrent(window)
-glfwSetKeyCallback(window, OnKeyEvent)
-glClearColor(0.3, 0.534, 0.12, 1.0)
+# attaching to a variable is optional
+m_GLFWwindow = window.Create()
 
 vert_shader = """
 #version 330 core
@@ -93,7 +85,7 @@ vbo = glGenBuffers(1)
 glBindVertexArray(vao)
 
 glBindBuffer(GL_ARRAY_BUFFER, vbo)
-glBufferData(GL_ARRAY_BUFFER, ArrayDatatype.arrayByteCount(vertices), vertices, GL_STATIC_DRAW)
+glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * len(vertices), vertices, GL_STATIC_DRAW)
 
 # glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
 # glBufferData(GL_ELEMENT_ARRAY_BUFFER, ArrayDatatype.arrayByteCount(indices), indices, GL_STATIC_DRAW)
@@ -118,7 +110,10 @@ def Move():
     if back:
         model = glm.translate(model, glm.vec3(0.0, 0.0, 0.01))
 
-while (not glfwWindowShouldClose(window)):
+# set the clear color once
+glClearColor(0.3, 0.534, 0.12, 1.0)
+
+while (not window.ShouldClose()):
     glClear(GL_COLOR_BUFFER_BIT)
 
     Move()
@@ -128,9 +123,9 @@ while (not glfwWindowShouldClose(window)):
     glUniformMatrix4fv(glGetUniformLocation(s.m_ProgramId, "model"), 1, GL_FALSE, glm.value_ptr(model))
     glDrawArrays(GL_TRIANGLES, 0, 6)
     
-    glfwSwapBuffers(window)
-    glfwPollEvents()
+    window.Update()
 
 glDeleteVertexArrays(1, [vao])
 glDeleteBuffers(1, [vbo])
 s.Destroy()
+window.Terminate()
