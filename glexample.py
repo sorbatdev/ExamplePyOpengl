@@ -1,11 +1,13 @@
+# external
 from ctypes import c_void_p
-from glfw.GLFW import * # for key enums
 from OpenGL.GL import *
-from OpenGL.arrays.arraydatatype import ArrayDatatype
 import glm
 import numpy as np
+
+# internal
 from shader import Shader
 from window import *
+from keycodes import *
 
 width = 1280
 height = 720
@@ -15,18 +17,18 @@ back = False
 aspect = GLfloat(width / height)
 
 def OnKeyPressed(key):
-    if key == GLFW_KEY_W:
+    if key == KEY_W:
         global forward 
         forward = True
-    elif key == GLFW_KEY_S:
+    elif key == KEY_S:
         global back
         back = True
 
 def OnKeyReleased(key):
     global forward, back
-    if key == GLFW_KEY_W:
+    if key == KEY_W:
         forward = False
-    elif key == GLFW_KEY_S:
+    elif key == KEY_S:
         back = False
 
 AddToCallback(EVENT_KEY_PRESS, OnKeyPressed)
