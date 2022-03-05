@@ -37,33 +37,7 @@ window = Window(width, height, "Window")
 # attaching to a variable is optional
 m_GLFWwindow = window.Create()
 
-vert_shader = """
-#version 330 core
-
-layout (location = 0) in vec3 aPos;
-
-uniform mat4 pv;
-uniform mat4 model;
-
-void main()
-{
-    gl_Position = pv * model * vec4(aPos, 1.0);
-}
-"""
-
-frag_shader = """
-#version 330 core
-
-out vec4 FragColor;
-
-void main()
-{
-    FragColor = vec4(0.2452, 0.47, 0.95, 1.0);
-} 
-"""
-
-s = Shader()
-s.create_program(vert_shader, frag_shader)
+s = Shader("basicshader")
 
 vertices = np.array([
      0.5,  0.5, 0.0,
