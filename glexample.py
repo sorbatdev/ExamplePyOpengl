@@ -7,7 +7,7 @@ import numpy as np
 # internal
 from shader import Shader
 from window import *
-from keycodes import *
+from utils.keycodes import *
 
 width = 1280
 height = 720
@@ -35,9 +35,7 @@ AddToCallback(EVENT_KEY_PRESS, OnKeyPressed)
 AddToCallback(EVENT_KEY_RELEASE, OnKeyReleased)
 
 window = Window(width, height, "Window")
-
-# attaching to a variable is optional
-m_GLFWwindow = window.Create()
+window.Create()
 
 s = Shader("basicshader")
 
