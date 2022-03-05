@@ -121,5 +121,8 @@ class Window:
     def OnMouseButton(window, button, action, mods):
         x, y = glfwGetCursorPos(window)
         if action == GLFW_PRESS:
-            for callback in m_Callbacks.get(EVENT_MOUSE_PRESSED):
+            for callback in m_Callbacks.get(EVENT_MOUSE_PRESS):
+                callback(x, y, button)
+        elif action == GLFW_RELEASE:
+            for callback in m_Callbacks.get(EVENT_MOUSE_RELEASE):
                 callback(x, y, button)
