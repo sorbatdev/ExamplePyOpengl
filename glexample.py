@@ -1,6 +1,5 @@
 from ctypes import c_void_p
 from glfw.GLFW import *
-from OpenGL import *
 from OpenGL.GL import *
 from OpenGL.arrays.arraydatatype import ArrayDatatype
 import glm
@@ -115,9 +114,9 @@ pv = projection * view
 def Move():
     global model
     if forward:
-        model = glm.translate(model, glm.vec3(0.0, 0.0, 0.01))
-    if back:
         model = glm.translate(model, glm.vec3(0.0, 0.0, -0.01))
+    if back:
+        model = glm.translate(model, glm.vec3(0.0, 0.0, 0.01))
 
 while (not glfwWindowShouldClose(window)):
     glClear(GL_COLOR_BUFFER_BIT)
